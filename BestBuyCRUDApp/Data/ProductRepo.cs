@@ -21,6 +21,13 @@ namespace BestBuyCRUDApp.Data
             return product;
         }
 
+        public void DeleteProduct(Product product)
+        {
+            _connection.Execute("DELETE FROM Reviews WHERE ProductID = @id;", new { id = product.ProductID });
+            _connection.Execute("DELETE FROM Sales WHERE ProductID = @id;", new { id = product.ProductID });
+            _connection.Execute("DELETE FROM Products WHERE ProductID = @id;", new { id = product.ProductID });
+        }
+
         public IEnumerable<Product> GetAllProducts()
         {
             return _connection.Query<Product>("SELECT * FROM products;");
@@ -38,7 +45,7 @@ namespace BestBuyCRUDApp.Data
 
         public void InsertProduct(Product productToInsert)
         {
-            _connection.Execute("INSERT INTO products (NAME, PRICE, CATEGORYID) VALUES (@name, @price, @categoryID);",
+            _connection.Execute("INSERT INTO products (Name, Price, CategoryID) VALUES (@name, @price, @categoryID);",
                 new { name = productToInsert.Name, price = productToInsert.Price, categoryID = productToInsert.CategoryID });
         }
 
